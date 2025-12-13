@@ -3,16 +3,47 @@ package tui
 import (
 	"fmt"
 	"io"
+	"os"
 	"strings"
 	"time"
 
-	//"git.sr.ht/~rockorager/vaxis"
+	"git.sr.ht/~rockorager/vaxis"
 	"github.com/nekorg/katnip"
 )
 
 func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
-	PrintCurrentMonthCal()
-	select {}
+	vx, err := vaxis.New(vaxis.Options{
+		WithTTY:         os.Stdout.Name(),
+		EnableSGRPixels: true,
+	})
+	if err != nil {
+		return 1
+	}
+	defer vx.Close()
+
+	draw := func() {
+		win := vx.Window()
+		win.Clear()
+		PrintCurrentMonthCal()
+
+		vx.Render()
+	}
+	draw()
+
+	for ev := range vx.Events() {
+		switch ev := ev.(type) {
+		case vaxis.Key:
+			if ev.EventType == vaxis.EventPress {
+				switch ev.Keycode {
+				case vaxis.KeyEsc:
+					return 0
+				}
+			}
+		case vaxis.Resize, vaxis.Redraw:
+			draw()
+		}
+	}
+	return 0
 }
 
 func PrintCurrentMonthCal() {
