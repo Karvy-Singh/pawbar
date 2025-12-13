@@ -70,7 +70,6 @@ func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 
 func PrintMonthCal(year int, month time.Month) {
 	const width = 20
-
 	title := fmt.Sprintf("%s %d", month, year)
 	fmt.Println(center(title, width))
 	fmt.Println("Su Mo Tu We Th Fr Sa")
@@ -79,18 +78,17 @@ func PrintMonthCal(year int, month time.Month) {
 	first := time.Date(year, month, 1, 0, 0, 0, 0, loc)
 	offset := int(first.Weekday())
 	daysInMonth := time.Date(year, month+1, 0, 0, 0, 0, 0, loc).Day()
-	for i := 0; i < offset; i++ {
-		fmt.Print("   ") // 2 digits + space
-	}
-	for day := 1; day <= daysInMonth; day++ {
-		fmt.Printf("%2d ", day)
-		wd := (offset + (day - 1)) % 7
-		if wd == 6 {
-			fmt.Println()
+	day := 1
+	for week := 0; week < 6; week++ {
+		for weekday := 0; weekday < 7; weekday++ {
+			cellIndex := week*7 + weekday
+			if cellIndex < offset || day > daysInMonth {
+				fmt.Print("   ")
+			} else {
+				fmt.Printf("%2d ", day)
+				day++
+			}
 		}
-	}
-	if (offset+daysInMonth-1)%7 != 6 {
-		fmt.Println()
 	}
 }
 
