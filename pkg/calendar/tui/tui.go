@@ -11,6 +11,12 @@ import (
 	"github.com/nekorg/katnip"
 )
 
+var (
+	now       = time.Now()
+	currYear  = now.Year()
+	currMonth = now.Month()
+)
+
 func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 	vx, err := vaxis.New(vaxis.Options{
 		WithTTY:         os.Stdout.Name(),
@@ -24,7 +30,7 @@ func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 	draw := func() {
 		win := vx.Window()
 		win.Clear()
-		PrintCurrentMonthCal()
+		PrintMonthCal(currYear, currMonth)
 
 		vx.Render()
 	}
@@ -37,6 +43,22 @@ func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 				switch ev.Keycode {
 				case vaxis.KeyEsc:
 					return 0
+				case vaxis.KeyLeft:
+					if currMonth.String() == "January" {
+						currYear -= 1
+						currMonth = time.Month(12)
+					} else {
+						currMonth = currMonth - 1
+					}
+					draw()
+				case vaxis.KeyRight:
+					if currMonth.String() == "December" {
+						currYear += 1
+						currMonth = time.Month(1)
+					} else {
+						currMonth = currMonth + 1
+					}
+					draw()
 				}
 			}
 		case vaxis.Resize, vaxis.Redraw:
@@ -44,11 +66,6 @@ func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 		}
 	}
 	return 0
-}
-
-func PrintCurrentMonthCal() {
-	now := time.Now()
-	PrintMonthCal(now.Year(), now.Month())
 }
 
 func PrintMonthCal(year int, month time.Month) {
