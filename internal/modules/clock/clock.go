@@ -10,9 +10,10 @@ import (
 	"time"
 
 	"git.sr.ht/~rockorager/vaxis"
+	"github.com/itchyny/timefmt-go"
 	"github.com/nekorg/pawbar/internal/config"
 	"github.com/nekorg/pawbar/internal/modules"
-	"github.com/itchyny/timefmt-go"
+	"github.com/nekorg/pawbar/pkg/calendar"
 )
 
 type ClockModule struct {
@@ -54,6 +55,10 @@ func (mod *ClockModule) Run() (<-chan bool, chan<- modules.Event, error) {
 						mod.receive <- true
 					}
 					mod.ensureTickInterval()
+					switch ev.Button {
+					case vaxis.MouseRightButton:
+						go calendar.LaunchMenu(ev.XPixel/2, ev.YPixel/2)
+					}
 
 				case modules.FocusIn:
 					if mod.opts.OnClick.HoverIn(&mod.opts) {
