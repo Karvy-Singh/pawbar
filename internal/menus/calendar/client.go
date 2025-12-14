@@ -21,7 +21,7 @@ func CreatePanel(x, y, w, h int) *katnip.Panel {
 		Size:     katnip.Vector{X: w, Y: h},
 		Edge:     katnip.EdgeNone,
 		Layer:    katnip.LayerTop,
-		// FocusPolicy: katnip.FocusOnDemand,
+		// FocusPolicy: katnip.FocusNotAllowed,
 		FocusPolicy: katnip.FocusExclusive,
 		ConfigFile:  "NONE",
 		KittyOverrides: []string{
