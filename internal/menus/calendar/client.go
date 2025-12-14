@@ -2,8 +2,8 @@ package calendar
 
 import (
 	"github.com/nekorg/katnip"
+	"github.com/nekorg/pawbar/internal/menus/calendar/tui"
 	"github.com/nekorg/pawbar/internal/utils"
-	"github.com/nekorg/pawbar/pkg/calendar/tui"
 )
 
 func LaunchMenu(x, y int) {
