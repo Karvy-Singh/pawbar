@@ -6,6 +6,7 @@ import (
 	"git.sr.ht/~rockorager/vaxis"
 
 	"github.com/nekorg/pawbar/internal/config"
+	"github.com/nekorg/pawbar/internal/menus/power"
 	"github.com/nekorg/pawbar/internal/modules"
 )
 
@@ -51,7 +52,7 @@ func (mod *powerProfileModule) Run() (<-chan bool, chan<- modules.Event, error) 
 
 					switch ev.Button {
 					case vaxis.MouseRightButton:
-						// go power.LaunchMenu(ev.XPixel/2, ev.YPixel/2)
+						go power.LaunchMenu(ev.XPixel/2, ev.YPixel/2)
 					}
 
 				case modules.FocusIn:

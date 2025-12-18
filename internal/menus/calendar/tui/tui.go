@@ -109,7 +109,7 @@ func PrintMonthCal(year int, month time.Month) {
 			if cellIndex < offset || day > daysInMonth {
 				fmt.Print("   ")
 			} else {
-				if day == now.Day() && month == now.Month() {
+				if day == now.Day() && month == now.Month() && year == now.Year() {
 					reverseVideo := "\033[7m"
 					reset := "\033[0m"
 					fmt.Printf("%s%2d%s ", reverseVideo, day, reset)
