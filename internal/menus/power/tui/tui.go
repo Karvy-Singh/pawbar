@@ -4,6 +4,7 @@ import (
 	"fmt"
 	"io"
 	"os"
+	"time"
 
 	"git.sr.ht/~rockorager/vaxis"
 	"github.com/godbus/dbus/v5"
@@ -72,6 +73,8 @@ func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 					setProfile("power-saver", obj)
 					redraw()
 				}
+				time.Sleep(300 * time.Millisecond)
+				return 0
 			}
 		}
 	}
@@ -138,7 +141,7 @@ func draw(sel int, win vaxis.Window, mode string) {
 	width, _ := win.Size()
 	for i, text := range items {
 		style := normal
-		prefix := "  "
+		prefix := "   "
 		if i == sel {
 			style = highlighted
 		}
