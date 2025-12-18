@@ -12,8 +12,8 @@ import (
 
 func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 	vx, err := vaxis.New(vaxis.Options{
-		WithTTY: os.Stdout.Name(),
-		// EnableSGRPixels: true,
+		WithTTY:         os.Stdout.Name(),
+		EnableSGRPixels: true,
 	})
 	if err != nil {
 		return 1
@@ -56,7 +56,6 @@ func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 				redraw()
 			}
 			if ev.EventType == vaxis.EventLeave {
-				// vx.Notify("mouse", "left")
 				sel = -1
 				redraw()
 			}
