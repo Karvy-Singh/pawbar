@@ -17,6 +17,24 @@ var (
 	currMonth = now.Month()
 )
 
+func inc() {
+	if currMonth.String() == "December" {
+		currYear += 1
+		currMonth = time.Month(1)
+	} else {
+		currMonth = currMonth + 1
+	}
+}
+
+func dec() {
+	if currMonth.String() == "January" {
+		currYear -= 1
+		currMonth = time.Month(12)
+	} else {
+		currMonth = currMonth - 1
+	}
+}
+
 func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 	vx, err := vaxis.New(vaxis.Options{
 		WithTTY:         os.Stdout.Name(),
@@ -43,24 +61,30 @@ func Panel(k *katnip.Kitty, rw io.ReadWriter) int {
 				switch ev.Keycode {
 				case vaxis.KeyEsc:
 					return 0
-				case vaxis.KeyLeft:
-					if currMonth.String() == "January" {
-						currYear -= 1
-						currMonth = time.Month(12)
-					} else {
-						currMonth = currMonth - 1
-					}
+				case vaxis.KeyLeft, vaxis.KeyUp:
+					dec()
 					draw()
-				case vaxis.KeyRight:
-					if currMonth.String() == "December" {
-						currYear += 1
-						currMonth = time.Month(1)
-					} else {
-						currMonth = currMonth + 1
-					}
+				case vaxis.KeyRight, vaxis.KeyDown:
+					inc()
 					draw()
 				}
 			}
+		case vaxis.Mouse:
+			switch ev.Button {
+
+			case vaxis.MouseWheelDown:
+				inc()
+				draw()
+
+			case vaxis.MouseWheelUp:
+				dec()
+				draw()
+
+				// case vaxis.EventPress:
+				// vx.Notify("press:", fmt.Sprintf("%d%d", ev.Col, ev.Row))
+			}
+			// 		case vaxis.FocusOut:
+			// 			return 0
 		case vaxis.Resize, vaxis.Redraw:
 			draw()
 		}
@@ -85,7 +109,18 @@ func PrintMonthCal(year int, month time.Month) {
 			if cellIndex < offset || day > daysInMonth {
 				fmt.Print("   ")
 			} else {
-				fmt.Printf("%2d ", day)
+				if day == now.Day() && month == now.Month() && year == now.Year() {
+					reverseVideo := "\033[7m"
+					reset := "\033[0m"
+					fmt.Printf("%s%2d%s ", reverseVideo, day, reset)
+				} else if day == now.Day() {
+					bgOn := "\033[48;5;243m"
+					off := "\033[0m"
+					fgOn := "\033[97m"
+					fmt.Printf("%s%s%2d%s%s ", bgOn, fgOn, day, off, off)
+				} else {
+					fmt.Printf("%2d ", day)
+				}
 				day++
 			}
 		}

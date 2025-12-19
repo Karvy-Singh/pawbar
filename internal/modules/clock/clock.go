@@ -12,8 +12,8 @@ import (
 	"git.sr.ht/~rockorager/vaxis"
 	"github.com/itchyny/timefmt-go"
 	"github.com/nekorg/pawbar/internal/config"
+	"github.com/nekorg/pawbar/internal/menus/calendar"
 	"github.com/nekorg/pawbar/internal/modules"
-	"github.com/nekorg/pawbar/pkg/calendar"
 )
 
 type ClockModule struct {

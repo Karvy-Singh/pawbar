@@ -1,18 +1,18 @@
-package calendar
+package power
 
 import (
 	"github.com/nekorg/katnip"
+	"github.com/nekorg/pawbar/internal/menus/power/tui"
 	"github.com/nekorg/pawbar/internal/utils"
-	"github.com/nekorg/pawbar/pkg/calendar/tui"
 )
 
 func LaunchMenu(x, y int) {
-	kn := CreatePanel(x, y, 21, 8)
+	kn := CreatePanel(x, y, 16, 3)
 	kn.Wait()
 }
 
 func init() {
-	katnip.RegisterFunc("calendar", tui.Panel)
+	katnip.RegisterFunc("power", tui.Panel)
 }
 
 func CreatePanel(x, y, w, h int) *katnip.Panel {
@@ -21,7 +21,7 @@ func CreatePanel(x, y, w, h int) *katnip.Panel {
 		Size:     katnip.Vector{X: w, Y: h},
 		Edge:     katnip.EdgeNone,
 		Layer:    katnip.LayerTop,
-		// FocusPolicy: katnip.FocusOnDemand,
+		// FocusPolicy: katnip.FocusNotAllowed,
 		FocusPolicy: katnip.FocusExclusive,
 		ConfigFile:  "NONE",
 		KittyOverrides: []string{
@@ -45,7 +45,7 @@ func CreatePanel(x, y, w, h int) *katnip.Panel {
 		},
 	}
 
-	kn := katnip.NewPanel("calendar", conf)
+	kn := katnip.NewPanel("power", conf)
 	utils.Logger.Printf(kn.Cmd.String())
 	kn.Start()
 
